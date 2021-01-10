@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <title>React App</title>
+    <script type="text/javascript">
+      // // FirebaseUI config.
+      // var uiConfig = {
+      //   signInSuccessUrl: "<url-to-redirect-to-on-success>",
+      //   signInOptions: [
+      //     // Leave the lines as is for the providers you want to offer your users.
+      //     firebase.auth.PhoneAuthProvider.PROVIDER_ID
+      //   ],
+      //   // tosUrl and privacyPolicyUrl accept either url string or a callback
+      //   // function.
+      //   // Terms of service url/callback.
+      //   tosUrl: "<your-tos-url>",
+      //   // Privacy policy url/callback.
+      //   privacyPolicyUrl: function () {
+      //     window.location.assign("<your-privacy-policy-url>");
+      //   }
+      // };
+
+      // // Initialize the FirebaseUI Widget using Firebase.
+      // var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      // // The start method will wait until the DOM is loaded.
+      // ui.start("#firebaseui-auth-container", uiConfig);
+
+      initApp = function () {
+        firebase.auth().onAuthStateChanged(
+          function (user) {
+            if (user) {
+              // User is signed in.
+              var displayName = user.displayName;
+              var uid = user.uid;
+              var phoneNumber = user.phoneNumber;
+              var providerData = user.providerData;
+              user.getIdToken().then(function (accessToken) {
+                document.getElementById("sign-in-status").textContent =
+                  "Signed in";
+                document.getElementById("sign-in").textContent = "Sign out";
+                document.getElementById(
+                  "account-details"
+                ).textContent = JSON.stringify(
+                  {
+                    displayName: displayName,
+                    phoneNumber: phoneNumber,
+                    photoURL: photoURL,
+                    uid: uid,
+                    accessToken: accessToken,
+                    providerData: providerData
+                  },
+                  null,
+                  "  "
+                );
+              });
+            } else {
+              // User is signed out.
+              document.getElementById("sign-in-status").textContent =
+                "Signed out";
+              document.getElementById("sign-in").textContent = "Sign in";
+              document.getElementById("account-details").textContent = "null";
+            }
+          },
+          function (error) {
+            console.log(error);
+          }
+        );
+      };
+
+      window.addEventListener("load", function () {
+        initApp();
+      });
+    </script>
+  </head>
+  <body>
+    	<div id="root"></div>
+    <h1>Welcome to My Awesome App</h1>
+    <div id="sign-in-status"></div>
+    <div id="sign-in">
+      <!-- <button>click me</button> -->
+    </div>
+    <pre id="account-details"></pre>
+    <div id="firebaseui-auth-container"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+
+    <!-- <script>
+      /// Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyBx-6hndhYVZEgSCLberx4wfQZBCua7LnE",
+        authDomain: "xpressdawadev.firebaseapp.com",
+        projectId: "xpressdawadev",
+        storageBucket: "xpressdawadev.appspot.com",
+        messagingSenderId: "317891675877",
+        appId: "1:317891675877:web:3d3bff314519aa3b15760c",
+        measurementId: "G-NFEY501TB2"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script> -->
+  <script src="{% static "build/react.js" %}"></script>
+  </body>
+</html>
